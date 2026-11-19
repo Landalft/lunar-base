@@ -230,6 +230,35 @@ footer strong{color:var(--ink)}
 .qs li{padding:14px;font-size:17px}
 .qs li span{font-size:14px}
 .big{font-size:23px}
+/* space theme */
+:root,:root[data-theme]{--bg:#050a14;--surface:rgba(13,22,40,.84);--ink:#f5f8ff;--muted:#aebdd6;--line:rgba(255,255,255,.17);--accent:#ffd166;--accent-ink:#0a1220;--accent-soft:rgba(255,209,102,.16);--good:#4fd1a0;--warn:#f0b452;--bad:#ff8a7e;--track:rgba(255,255,255,.14);color-scheme:dark}
+body{background:#050a14}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:var(--moon,none) center/cover no-repeat;filter:grayscale(.2) contrast(1.1)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(130% 70% at 50% 8%,rgba(5,10,20,.18),rgba(5,10,20,.9) 75%)}
+.card{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.card h2{font-size:27px;font-weight:700;line-height:1.12}
+.hero{background:transparent!important;border:0;padding:26px 6px 10px}
+.hero h1{font-size:50px;line-height:1;text-shadow:0 4px 30px rgba(0,0,0,.7)}
+.hero .eyebrow{font-size:12px}
+.run{border-radius:14px;box-shadow:0 6px 24px rgba(255,209,102,.25);text-transform:none}
+.run.alt{background:transparent;box-shadow:none}
+.nav{background:#070e1c;border-top:1px solid var(--line)}
+.nav button{background:transparent}
+.nav #fwd{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-size:16px}
+.nav #fwd.ghost{background:transparent;color:var(--muted);border-color:var(--line);font-weight:500}
+#more{background:#070e1c}
+.qs li{background:rgba(255,255,255,.04)}
+.qs li b.ans{color:var(--good)}
+.strip .now{color:var(--accent);border-color:var(--accent)}
+.cue{animation:cue 1.5s ease-in-out infinite}
+@keyframes cue{0%,100%{box-shadow:0 0 0 0 rgba(255,209,102,.75)}55%{box-shadow:0 0 0 12px rgba(255,209,102,0)}}
+.cmpw{touch-action:pan-y;cursor:ew-resize}
+.cmptop{position:absolute;inset:0;clip-path:inset(0 50% 0 0)}
+.cmpline{position:absolute;top:0;bottom:0;left:50%;width:3px;margin-left:-1.5px;background:#ffd166;pointer-events:none}
+.cmpline i{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-style:normal;font-size:11px;white-space:nowrap;background:#ffd166;color:#0a1220;font-weight:700;border-radius:999px;padding:7px 8px}
+.cmpw .tag{position:absolute;top:8px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:rgba(5,10,20,.8);color:#fff;padding:4px 8px;border-radius:6px;pointer-events:none}
+.cmpw .tag.l{left:8px}.cmpw .tag.r{right:8px}
+@media (prefers-reduced-motion: reduce){.cue{animation:none;outline:2px solid var(--accent)}}
 </style>
 </head>
 <body>
@@ -315,20 +344,45 @@ footer strong{color:var(--ink)}
   </section>
 </div>
 
-<div class="step" data-step="7">
+<div class="step" data-step="7 8 9">
   <section class="card" id="notyet">
     <h2>The answers come from the ground</h2>
     <p class="body">Build the module three times first.</p>
     <button type="button" class="run alt" id="tobuild">Go and build</button>
   </section>
+</div>
+
+<div class="step" data-step="7">
+  <section class="card" id="cmpcard" hidden>
+    <h2>Same ground. Limited data, then good data.</h2>
+    <p class="hint">Drag across the zone.</p>
+    <div class="gridwrap cmpw" id="cmpw">
+      <svg id="truth" viewBox="0 0 80 80" role="img" aria-label="The zone with good data"></svg>
+      <div class="cmptop" id="cmp-top"><svg id="cmp-poor" viewBox="0 0 80 80" role="img" aria-label="The zone with limited data"></svg></div>
+      <div class="cmpline" id="cmp-line"><i>◀ ▶</i></div>
+      <span class="tag l">Limited</span><span class="tag r">Good</span>
+    </div>
+    <input type="range" id="cmpr" min="0" max="100" value="50" aria-label="Slide between limited data and good data">
+    <div class="key" id="truthkey"></div>
+    <p class="hint">The base picture is real NASA data. 2 and 3 are your builds.</p>
+  </section>
+</div>
+
+<div class="step" data-step="8">
+  <section class="card" id="z3card" hidden>
+    <h2>And now we can see underground</h2>
+    <div class="cube" id="zwrap"><canvas id="zcube" aria-label="3D view of the building zone after the survey"></canvas><p class="cubefail" id="zfail" hidden>This device cannot draw the 3D view.</p></div>
+    <div class="legend"><span><i style="background:#2ea06e"></i>firm</span><span><i style="background:#b9a43a"></i>soft soil</span><span><i style="background:#3a8fd8"></i>ice</span><span><i style="background:#d0443a"></i>void</span><span><i style="background:#ffd166"></i>your module</span></div>
+    <p class="hint">Drag to turn it. Your 4 km zone in 64 columns, 50 m deep. From orbit, this whole zone was less than one block.</p>
+    <p class="hint">This ground is invented for the demo. The level of detail is what a real survey gives.</p>
+  </section>
+</div>
+
+<div class="step" data-step="9">
   <section class="card" id="truthcard" hidden>
     <h2>Three questions, answered</h2>
     <ul class="qs" id="answers"></ul>
     <p class="next" id="lesson"></p>
-    <details class="fold"><summary>See the real ground and your three builds</summary>
-      <div class="gridwrap"><svg id="truth" viewBox="0 0 80 80" role="img" aria-label="The ground as it really is, with your three builds"></svg></div>
-      <div class="key" id="truthkey"></div>
-    </details>
   </section>
   <section class="card" id="whycard">
     <p class="big">Better data does not make the Moon safer. It tells you where the safe ground is, before you build.</p>
@@ -336,7 +390,7 @@ footer strong{color:var(--ink)}
   </section>
 </div>
 
-<div class="step" data-step="8">
+<div class="step" data-step="10">
   <section class="card">
     <h2>What is real here</h2>
     <p class="stamp">Public NASA data only. No SLB data. Nothing private.</p>
@@ -508,22 +562,23 @@ function render(){
   TABS.forEach((t,i)=>{ const b=el("button",{type:"button",id:"tab-"+t.id,"aria-pressed":t.id===state.tab},"<b>"+(i+1)+". "+t.name+"</b><span>"+t.sub+"</span>"); if(!unlocked(t.id)) b.disabled=true; b.addEventListener("click",()=>{ state.tab=t.id; render(); }); tw.appendChild(b); });
   const tab=state.tab, run=state.run[tab], pick=state.pick[tab];
   $("buildtitle").textContent=TITLE[tab]; $("modfold").hidden=tab!=="none";
-  if(!$("hero").dataset.bg){ $("hero").dataset.bg=1; $("hero").style.backgroundImage="linear-gradient(rgba(6,12,24,.35),rgba(6,12,24,.92) 62%),url("+AREAS.ari.layers.photo.img+")"; }
+  if(!$("hero").dataset.bg){ $("hero").dataset.bg=1; document.body.style.setProperty("--moon","url("+AREAS.ari.layers.photo.img+")"); $("hero").dataset.x="linear-gradient(rgba(6,12,24,.35),rgba(6,12,24,.92) 62%),url("+AREAS.ari.layers.photo.img+")"; }
   $("tabnote").textContent = tab==="none" ? "Your zone, seen from orbit. Tap where you would build." : tab==="poor" ? "A rough map: four big blocks, judged by their average. Tap inside the one you trust." : "The zone, measured square by square. Tap a safe square. Or switch a tool off and see what goes missing.";
   const iw=$("inst"); iw.hidden=tab!=="good"; iw.innerHTML="";
   INST.forEach(i=>{ const b=el("button",{type:"button",class:"chip",id:"inst-"+i.id,"aria-pressed":!!state.inst[i.id]},"<b>"+i.name+"</b><span>"+i.what+"</span>"); b.addEventListener("click",()=>{ state.inst[i.id]=!state.inst[i.id]; state.run.good=null; render(); }); iw.appendChild(b); });
   const g=gridSVG(tab,[{q:pick,t:run&&done(tab)&&run.sim.fail?"✕":"●",dead:run&&run.sim.fail&&(run.shown==null||run.sim.fail<=run.shown)}],!run||done(tab));
-  $("grid").innerHTML=g.h; $("grid").querySelectorAll("[data-r]").forEach(q=>q.addEventListener("click",()=>{ state.pick[tab]={r:+q.dataset.r,c:+q.dataset.c}; state.run[tab]=null; if(tab==="none"){ state.run.poor=null; state.run.good=null; } if(tab==="poor") state.run.good=null; render(); }));
+  $("grid").innerHTML=g.h+((!pick&&!run)?TAPCUE:""); $("grid").querySelectorAll("[data-r]").forEach(q=>q.addEventListener("click",()=>{ state.pick[tab]={r:+q.dataset.r,c:+q.dataset.c}; state.run[tab]=null; if(tab==="none"){ state.run.poor=null; state.run.good=null; } if(tab==="poor") state.run.good=null; render(); }));
   $("key").innerHTML = tab==="good" ? keyHTML(["safe","pad","ice","void","weak","steep"].filter(k=>g.counts[k]>0))+(g.counts.unk?'<span>? = not cleared: '+INST.filter(i=>!state.inst[i.id]).map(i=>i.name.toLowerCase()).join(" and ")+' left off</span>':'') : tab==="poor" ? '<span>Green and amber are averages over 2 km, not what is under each square.</span>' : (g.counts.steep?keyHTML(["steep"])+'<span>(real slope, seen from orbit). The rest all looks the same.</span>':'<span>Every square looks the same from orbit.</span>');
   $("run").disabled=!pick; $("run").textContent=pick?"Build here and run 10 years":"Tap a square to choose your spot";
   showOutcome();
   const o=odds(d), lab={none:"No data",poor:"Limited data",good:(state.inst.seis&&state.inst.grav&&state.inst.neut)?"Good data":"Incomplete survey"};
   $("score").innerHTML=TABS.map(t=>{ const r=state.run[t.id], dn=done(t.id); return '<span class="'+(dn?(r.sim.fail?"bad":"ok"):(t.id===state.tab?"now":""))+'">'+lab[t.id]+(dn?(r.sim.fail?" ✕":" ✓"):"")+'</span>'; }).join("");
   $("rigline").innerHTML="<b>Staged:</b> in this demo your first two builds always fail, wherever you tap. On this invented ground, a blind build would really fail about "+o.none+" times in 100.";
-  const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all; $("whycard").hidden=!all; $("notyet").hidden=all; navUpdate(); setTimeout(moreUpdate,60);
+  const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all; $("whycard").hidden=!all; $("cmpcard").hidden=!all; $("z3card").hidden=!all; $("notyet").hidden=all; navUpdate(); setTimeout(moreUpdate,60);
   if(all){
-    const tg=gridSVG("truth",TABS.map((t,i)=>({q:state.pick[t.id],t:String(i+1),dead:!!state.run[t.id].sim.fail})),false); $("truth").innerHTML=tg.h;
-    $("truthkey").innerHTML=keyHTML(["safe","pad","ice","void","weak","steep"].filter(k=>tg.counts[k]>0))+'<span>1, 2, 3: your three builds</span>';
+    const tg=gridSVG("truth",[{q:state.pick.good,t:"3",dead:!!state.run.good.sim.fail}],false); $("truth").innerHTML=tg.h;
+    $("cmp-poor").innerHTML=gridSVG("poor",[{q:state.pick.poor,t:"2",dead:!!state.run.poor.sim.fail}],false).h;
+    $("truthkey").innerHTML=keyHTML(["safe","pad","ice","void","weak","steep"].filter(k=>tg.counts[k]>0));
     const c=tg.counts, hold=c.safe+c.pad+c.ice, row=(q,a)=>'<li><i>✓</i><div>'+q+'<span>From orbit: cannot tell.</span><b class="ans">'+a+'</b></div></li>';
     $("answers").innerHTML=
       row("Will the ground hold?","Yes, on "+hold+" of 64 squares.")+
@@ -562,17 +617,25 @@ $("run").addEventListener("click",()=>{
   const step=()=>{ if(state.run[tab]!==r) return; if(r.shown<r.sim.yrs.length-1){ r.shown++; showOutcome(); setTimeout(step,330); } else end(); };
   setTimeout(step,330);
 });
-const STEPS=9, BUILD={2:"none",4:"poor",6:"good"};
-const FWD=["Start","Build with what we have","","Now try with limited data","","Now try with good data","","What is real here?",""];
-const AFTER={none:"Why did that happen?",poor:"What would it take?",good:"See the three answers"};
+const STEPS=11, BUILD={2:"none",4:"poor",6:"good"};
+const FWD=["Start","Build with what we have","","Now try with limited data","","Now try with good data","","Now look underground","See the three answers","What is real here?",""];
+const AFTER={none:"Why did that happen?",poor:"What would it take?",good:"See what changed"};
 const TITLE={none:"Build 1: with what we have",poor:"Build 2: with limited data",good:"Build 3: with good data"};
 let step=0;
 const allDone=()=>TABS.every(t=>done(t.id));
 function navUpdate(){ $("back").disabled=step===0; $("count").textContent=(step+1)+" / "+STEPS; $("prog").style.width=((step+1)/STEPS*100)+"%";
-  const f=$("fwd"), tb=BUILD[step]; f.hidden=step===STEPS-1; f.textContent = tb ? (done(tb)?AFTER[tb]:"Skip this build") : FWD[step]; }
+  const f=$("fwd"), tb=BUILD[step]; f.hidden=step===STEPS-1; f.textContent = tb ? (done(tb)?AFTER[tb]:"Skip this build") : FWD[step]; f.classList.toggle("ghost",!!tb&&!done(tb)); cueUpdate(); }
+function cueUpdate(){ document.querySelectorAll(".cue").forEach(e=>e.classList.remove("cue")); const tb=BUILD[step]; let el=null;
+  if(tb){ const r=state.run[tb]; if(r&&r.shown!=null) return; el = done(tb) ? $("next") : state.pick[tb] ? $("run") : null; } else if(step<STEPS-1) el=$("fwd");
+  if(el) el.classList.add("cue"); }
+const TAPCUE='<g pointer-events="none"><circle cx="40" cy="38" r="6" fill="none" stroke="#ffd166" stroke-width="1.3"><animate attributeName="r" values="4;12;4" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;.15;1" dur="1.6s" repeatCount="indefinite"/></circle><circle cx="40" cy="38" r="2.4" fill="#ffd166"/><rect x="22" y="47" width="36" height="9" rx="4.5" fill="#ffd166"/><text x="40" y="53.3" font-size="4.6" font-weight="700" text-anchor="middle" fill="#0a1220" font-family="IBM Plex Sans,Arial">Tap a square</text></g>';
+function cmpSet(v){ v=Math.max(0,Math.min(100,v)); $("cmp-top").style.clipPath="inset(0 "+(100-v)+"% 0 0)"; $("cmp-line").style.left=v+"%"; $("cmpr").value=v; }
+$("cmpr").addEventListener("input",e=>cmpSet(+e.target.value));
+(function(){ const w=$("cmpw"); let on=false; const mv=e=>{ const b=w.getBoundingClientRect(); cmpSet((e.clientX-b.left)/b.width*100); };
+  w.addEventListener("pointerdown",e=>{ on=true; mv(e); }); window.addEventListener("pointermove",e=>{ if(on) mv(e); }); window.addEventListener("pointerup",()=>{ on=false; }); window.addEventListener("pointercancel",()=>{ on=false; }); })();
 function go(n){ step=Math.max(0,Math.min(STEPS-1,n)); const tb=BUILD[step]; if(tb) state.tab=tb;
   document.querySelectorAll(".step").forEach(s=>s.classList.toggle("on",s.dataset.step.split(" ").includes(String(step))));
-  render(); window.scrollTo(0,0); if(step===3 && cube3d.ok) cube3d.grow=0; setTimeout(moreUpdate,60); }
+  render(); window.scrollTo(0,0); if(step===3 && cube3d.ok) cube3d.grow=0; if(step===7) cmpSet(50); if(step===8 && zone3d.ok && allDone()) zone3d.build(); setTimeout(moreUpdate,60); }
 $("back").addEventListener("click",()=>go(step-1)); $("fwd").addEventListener("click",()=>go(step+1)); $("tobuild").addEventListener("click",()=>go(2));
 function celebrate(){ const sc=$("scene").parentNode, old=sc.querySelector(".confetti"); if(old) old.remove(); const box=el("div",{class:"confetti"}), cols=["#ffd166","#2ea06e","#5b93ff","#f08a80","#ffffff"];
   for(let i=0;i<34;i++){ const p=el("i",{}); p.style.left=(Math.random()*100)+"%"; p.style.background=cols[i%5]; p.style.animationDelay=(Math.random()*.6)+"s"; p.style.animationDuration=(1.3+Math.random()*.9)+"s"; box.appendChild(p); }
@@ -641,8 +704,47 @@ function initCube(){
   $("cplay").textContent=auto?"Pause":"Spin";
   (function loop(){ size(); if(auto) g.rotation.y+=.008; if(cube3d.vox && cube3d.grow<1){ cube3d.grow=Math.min(1,cube3d.grow+.025); const e=1-Math.pow(1-cube3d.grow,3); cube3d.vox.scale.y=Math.max(.01,e); } renderer.render(scene,cam); requestAnimationFrame(loop); })();
 }
+// ---------- 3D view of the zone at survey detail (invented ground)
+const zone3d={ok:false};
+function initZone(){
+  if(!window.THREE){ $("zfail").hidden=false; return; }
+  const cv=$("zcube"); let renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true}); }catch(e){ $("zfail").hidden=false; return; }
+  renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1)); renderer.setClearColor(0x0b1626);
+  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(32,4/3,1,500); cam.position.set(0,62,104); cam.lookAt(0,-7,0);
+  scene.add(new THREE.AmbientLight(0xffffff,.7)); const dl=new THREE.DirectionalLight(0xffffff,.7); dl.position.set(-40,80,30); scene.add(dl);
+  const g=new THREE.Group(); scene.add(g); g.rotation.y=-.6;
+  const COLS={safe:0x2ea06e,pad:0xb9a43a,weak:0xc8762e,ice:0x3a8fd8,void:0xd0443a,steep:0x7a2d27};
+  zone3d.grow=1;
+  zone3d.build=function(){
+    while(g.children.length){ const c=g.children[0]; g.remove(c); if(c.geometry) c.geometry.dispose(); }
+    const a=A(), d=design(), W=60, cs=W/N, th=3.4, nz=5; let mn=0, rg=1;
+    if(a.zone.elev){ const fl=[].concat.apply([],a.zone.elev); mn=Math.min.apply(null,fl); rg=Math.max(1,Math.max.apply(null,fl)-mn); }
+    const box=(x,y,z,w,h,col,op)=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,w),new THREE.MeshLambertMaterial({color:col,transparent:op<1,opacity:op})); m.position.set(x,y,z); g.add(m); return m; };
+    zone3d.deep=new THREE.Group(); g.add(zone3d.deep);
+    for(let r=0;r<N;r++)for(let c=0;c<N;c++){ const st=truth(r,c,d), x=-W/2+(c+.5)*cs, z=-W/2+(r+.5)*cs, y0=a.zone.elev?(a.zone.elev[r][c]-mn)/rg*7:0;
+      box(x,y0,z,cs*.95,.7,COLS[st],.92);
+      const col=[]; if(st==="pad") col.push([0,COLS.pad]); if(st==="weak"){ col.push([0,COLS.weak]); col.push([1,COLS.weak]); } if(st==="ice"){ col.push([0,COLS.ice]); col.push([1,COLS.ice]); }
+      const gd=G()[r][c]; if(gd.void){ const k=gd.voidDepth>20?3:1; col.push([k,COLS.void]); col.push([k+1,COLS.void]); }
+      col.forEach(q=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(cs*.9,th*.9,cs*.9),new THREE.MeshLambertMaterial({color:q[1]})); m.position.set(x,-2.2-(q[0]+.5)*th,z); zone3d.deep.add(m); });
+    }
+    const fr=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(W,th*nz,W)),new THREE.LineBasicMaterial({color:0x5a7196})); fr.position.y=-2.2-th*nz/2; g.add(fr);
+    const p=state.pick.good; if(p){ const y0=a.zone.elev?(a.zone.elev[p.r][p.c]-mn)/rg*7:0; const m=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.2,4.5,16),new THREE.MeshLambertMaterial({color:0xffd166})); m.position.set(-W/2+(p.c+.5)*cs,y0+2.6,-W/2+(p.r+.5)*cs); g.add(m); }
+    zone3d.grow=0;
+  };
+  zone3d.ok=true;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let auto=!reduce, drag=null;
+  cv.addEventListener("pointerdown",e=>{ drag={x:e.clientX,r:g.rotation.y}; auto=false; });
+  window.addEventListener("pointermove",e=>{ if(drag) g.rotation.y=drag.r+(e.clientX-drag.x)*.012; });
+  window.addEventListener("pointerup",()=>{ drag=null; }); window.addEventListener("pointercancel",()=>{ drag=null; });
+  (function loop(){ const w=cv.clientWidth,h=cv.clientHeight,pr=renderer.getPixelRatio(); if(w&&h){ if(cv.width!==Math.round(w*pr)||cv.height!==Math.round(h*pr)){ renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
+      if(auto) g.rotation.y+=.007; if(zone3d.deep && zone3d.grow<1){ zone3d.grow=Math.min(1,zone3d.grow+.02); const e=1-Math.pow(1-zone3d.grow,3); zone3d.deep.scale.y=Math.max(.01,e); }
+      renderer.render(scene,cam); } requestAnimationFrame(loop); })();
+}
 render();
 initCube();
+initZone();
 navUpdate();
 setTimeout(moreUpdate,300);
 </script>
