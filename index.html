@@ -207,32 +207,51 @@ details.fold .key{margin-top:8px}
 footer{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
 footer strong{color:var(--ink)}
 @media (prefers-reduced-motion: reduce){.meter .after,.know .bar em,.progress i{transition:none}}
+.wrap{gap:18px}
+.card{padding:22px 18px;gap:16px;border-radius:18px}
+.card h2{font-size:24px;line-height:1.18;letter-spacing:-.01em}
+.hint{font-size:14.5px;line-height:1.45}
+.verdict{font-size:17px;line-height:1.4}
+.pill{font-size:15px;padding:7px 14px}
+.run{font-size:18px;padding:16px}
+.hero{min-height:calc(100vh - 150px);min-height:calc(100svh - 150px);border-radius:22px;padding:30px 22px;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;background:#0b1626 center/cover no-repeat;color:#fff}
+.hero .eyebrow{color:#ffd166}
+.hero h1{color:#fff;font-size:42px;line-height:1.04;letter-spacing:-.02em;margin:0}
+.hero p{color:#e3ebf7;font-size:19px;line-height:1.35;margin:0}
+.hero p.small{font-size:15px;color:#b9c7dc}
+.hero .q3{list-style:none;margin:10px 0 0;padding:0}
+.hero .q3 li{font-size:19px;font-weight:600;padding:11px 0;border-top:1px solid rgba(255,255,255,.28)}
+.hero .q3 li:last-child{border-bottom:1px solid rgba(255,255,255,.28)}
+.strip{display:flex;gap:6px}
+.strip span{flex:1;text-align:center;font-size:12px;font-weight:600;padding:7px 2px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.strip .now{border-color:var(--accent);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.strip .bad{border-color:#d0443a;color:#d0443a}
+.strip .ok{background:#2ea06e;border-color:#2ea06e;color:#fff}
+.qs li{padding:14px;font-size:17px}
+.qs li span{font-size:14px}
+.big{font-size:23px}
 </style>
 </head>
 <body>
 <div class="wrap">
 <div class="step on" data-step="0">
-  <header>
+  <header class="hero" id="hero">
     <div class="eyebrow">Understanding the Moon</div>
-    <h1>Before anyone builds on the Moon, three questions need answers</h1>
-    <p class="lede">Agencies and companies plan to land, build and stay. They all ask the same things about the ground. Today, nobody can answer them.</p>
-  </header>
-
-  <section class="card">
-    <h2>The three questions</h2>
-    <ul class="qs">
-      <li><i>?</i><div>Will the ground hold my base?<span>Loose soil lets a heavy module sink.</span></div></li>
-      <li><i>?</i><div>Is it hollow underneath?<span>Old lava tunnels can run below the surface.</span></div></li>
-      <li><i>?</i><div>Is there water here?<span>Ice in the soil means water you do not launch.</span></div></li>
+    <h1>Build the first base on the Moon.</h1>
+    <p>One module. It has to stand for ten years. Where do you put it?</p>
+    <ul class="q3">
+      <li>Will the ground hold?</li>
+      <li>Is it hollow underneath?</li>
+      <li>Is there water?</li>
     </ul>
-    <p class="hint">Get one wrong and you lose the base, or ship water from Earth for good.</p>
-  </section>
+    <p class="small">Three questions. Today, nobody can answer them.</p>
+  </header>
 </div>
 
 <div class="step" data-step="1">
   <section class="card" aria-label="Map">
     <h2>What we have: maps from orbit</h2>
-    <p class="hint">Real NASA data. Sharp on the surface. Pick a region and look.</p>
+    <p class="hint">Real NASA data. Pick where to go.</p>
     <div class="area" role="group" aria-label="Region">
       <button type="button" id="area-ari" data-area="ari" aria-pressed="true"><b>Aristarchus plateau</b><span>Our worked example</span></button>
       <button type="button" id="area-sp" data-area="sp" aria-pressed="false"><b>South pole</b><span>Where a base is planned</span></button>
@@ -240,53 +259,15 @@ footer strong{color:var(--ink)}
     <div class="map" id="map"><img id="mapimg" alt="" src=""><svg id="overlay" aria-hidden="true"></svg></div>
     <div class="seg" id="layers" role="group" aria-label="Map layer"></div>
     <p class="hint" id="layernote"></p>
-    <p class="hint">The yellow box is a building zone, 4 km across.</p>
+    <p class="hint">The yellow box is your building zone, 4 km across.</p>
   </section>
 </div>
 
-<div class="step" data-step="2">
-  <section class="card" id="sub">
-    <h2>And this is all orbit sees underground</h2>
-    <div class="cube" id="cubewrap"><canvas id="cube" aria-label="3D density model, rotating"></canvas><p class="cubefail" id="cubefail" hidden>This device cannot draw the 3D view.</p></div>
-    <div class="cubectl"><button type="button" id="czout" aria-label="Zoom out">− Zoom</button><button type="button" id="czin" aria-label="Zoom in">+ Zoom</button><button type="button" id="cplay">Pause</button></div>
-    <div class="ctl"><label for="ctilt">Tilt the view</label><input type="range" id="ctilt" min="-30" max="35" step="1" value="0"></div>
-    <div class="ctl"><label for="cthr">Blocks shown <b id="cthrv"></b></label><input type="range" id="cthr" min="0" max="100" step="5" value="65"></div>
-    <div class="legend"><span><i style="background:#c8463a"></i>denser than average</span><span><i style="background:#3a6fd0"></i>lighter than average</span><span><i style="background:#ffd166"></i>building zone</span></div>
-    <p class="hint" id="cubenote"></p>
-    <p class="hint">Blocks kilometres wide. A module is ten metres wide. Orbit helps you choose a region. It cannot answer the three questions.</p>
-  </section>
-</div>
-
-<div class="step" data-step="3">
-  <section class="card">
-    <h2>What we need: measurements on the ground</h2>
-    <ul class="qs">
-      <li><i>1</i><div>Seismic station<span>Answers: will the ground hold?</span></div></li>
-      <li><i>2</i><div>Gravity meter<span>Answers: is it hollow underneath?</span></div></li>
-      <li><i>3</i><div>Neutron probe<span>Answers: is there water?</span></div></li>
-    </ul>
-    <p class="hint">On Earth these are routine before anything is built. No building site on the Moon has been surveyed this way yet.</p>
-  </section>
-</div>
-
-<div class="step" data-step="4">
-  <section class="card">
-    <h2>Design a module to build</h2>
-    <div class="scene"><svg id="mod" viewBox="0 0 320 130" role="img" aria-label="Side view of the module"></svg></div>
-    <div class="ctl"><label for="dia">Diameter <b id="diav"></b></label><input type="range" id="dia" min="6" max="20" step="1" value="10"></div>
-    <p class="rowlabel">Floors</p>
-    <div class="seg" id="levels" role="group" aria-label="Floors"></div>
-    <div class="ctl"><label for="shield">Soil cover against radiation <b id="shieldv"></b></label><input type="range" id="shield" min="0" max="3" step="0.5" value="2"></div>
-    <dl class="tiles" id="tiles"></dl>
-    <p class="hint">Bigger and heavier asks more of the ground.</p>
-  </section>
-</div>
-
-<div class="step" data-step="5">
+<div class="step" data-step="2 4 6">
   <section class="card" id="buildcard">
-    <h2>Build it three times</h2>
-    <p class="hint">Same module, same ground. Only the map changes.</p>
-    <div class="tabs" id="tabs" role="group" aria-label="Which map you build from"></div>
+    <div class="strip" id="score"></div>
+    <h2 id="buildtitle"></h2>
+    <div id="tabs" hidden></div>
     <p class="hint" id="tabnote"></p>
     <div class="chips" id="inst" hidden></div>
     <div class="gridwrap"><svg id="grid" viewBox="0 0 80 80" role="img" aria-label="The 4 km building zone in 64 squares"></svg></div>
@@ -298,43 +279,72 @@ footer strong{color:var(--ink)}
       <p class="verdict" id="verd"></p>
       <button type="button" class="run" id="next" hidden></button>
     </div>
-    <table class="cmp"><thead><tr><th>Map</th><th>Your module</th><th>100 builders</th></tr></thead><tbody id="score"></tbody></table>
-    <p class="hint">"100 builders" is the honest count of how many would lose this module choosing from that map.</p>
+    <details class="fold" id="modfold"><summary>Change the module</summary>
+    <div class="scene"><svg id="mod" viewBox="0 0 320 130" role="img" aria-label="Side view of the module"></svg></div>
+    <div class="ctl"><label for="dia">Diameter <b id="diav"></b></label><input type="range" id="dia" min="6" max="20" step="1" value="10"></div>
+    <p class="rowlabel">Floors</p>
+    <div class="seg" id="levels" role="group" aria-label="Floors"></div>
+    <div class="ctl"><label for="shield">Soil cover against radiation <b id="shieldv"></b></label><input type="range" id="shield" min="0" max="3" step="0.5" value="2"></div>
+    <dl class="tiles" id="tiles"></dl>
+    </details>
   </section>
 </div>
 
-<div class="step" data-step="6">
+<div class="step" data-step="3">
+  <section class="card" id="sub">
+    <h2>Why? This is all orbit sees underground</h2>
+    <div class="cube" id="cubewrap"><canvas id="cube" aria-label="3D density model, rotating"></canvas><p class="cubefail" id="cubefail" hidden>This device cannot draw the 3D view.</p></div>
+    <div class="cubectl"><button type="button" id="czout" aria-label="Zoom out">− Zoom</button><button type="button" id="czin" aria-label="Zoom in">+ Zoom</button><button type="button" id="cplay">Pause</button></div>
+    <div class="ctl"><label for="ctilt">Tilt the view</label><input type="range" id="ctilt" min="-30" max="35" step="1" value="0"></div>
+    <div class="ctl"><label for="cthr">Blocks shown <b id="cthrv"></b></label><input type="range" id="cthr" min="0" max="100" step="5" value="65"></div>
+    <div class="legend"><span><i style="background:#c8463a"></i>denser than average</span><span><i style="background:#3a6fd0"></i>lighter than average</span><span><i style="background:#ffd166"></i>building zone</span></div>
+    <p class="hint" id="cubenote"></p>
+    <p class="hint">Blocks kilometres wide. Your module is ten metres wide.</p>
+  </section>
+</div>
+
+<div class="step" data-step="5">
+  <section class="card">
+    <h2>What it takes: measure the ground</h2>
+    <ul class="qs">
+      <li><i>1</i><div>Seismic station<span>Will the ground hold?</span></div></li>
+      <li><i>2</i><div>Gravity meter<span>Is it hollow underneath?</span></div></li>
+      <li><i>3</i><div>Neutron probe<span>Is there water?</span></div></li>
+    </ul>
+    <p class="hint">Routine on Earth before anything is built. Never done for a building site on the Moon.</p>
+  </section>
+</div>
+
+<div class="step" data-step="7">
   <section class="card" id="notyet">
     <h2>The answers come from the ground</h2>
-    <p class="body">Build the module three times first: with no data, limited data and good data.</p>
+    <p class="body">Build the module three times first.</p>
     <button type="button" class="run alt" id="tobuild">Go and build</button>
   </section>
-
   <section class="card" id="truthcard" hidden>
-    <h2>The three questions, answered</h2>
+    <h2>Three questions, answered</h2>
     <ul class="qs" id="answers"></ul>
     <p class="next" id="lesson"></p>
     <details class="fold"><summary>See the real ground and your three builds</summary>
       <div class="gridwrap"><svg id="truth" viewBox="0 0 80 80" role="img" aria-label="The ground as it really is, with your three builds"></svg></div>
       <div class="key" id="truthkey"></div>
     </details>
-    <button type="button" class="run alt" id="again">Play again on new ground</button>
   </section>
-
   <section class="card" id="whycard">
     <p class="big">Better data does not make the Moon safer. It tells you where the safe ground is, before you build.</p>
+    <button type="button" class="run alt" id="again">Play again on new ground</button>
   </section>
 </div>
 
-<div class="step" data-step="7">
+<div class="step" data-step="8">
   <section class="card">
-    <h2>What is real here, and what is not</h2>
+    <h2>What is real here</h2>
     <p class="stamp">Public NASA data only. No SLB data. Nothing private.</p>
     <ul class="src">
       <li><b>Real:</b> every map and photo. NASA public data.</li>
       <li><b>Ours:</b> the 3D model under the surface, calculated from NASA gravity.</li>
       <li><b>Invented:</b> the ground under each square, and the ten-year story.</li>
-      <li><b>Rigged:</b> your first two builds always fail. The odds shown are honest.</li>
+      <li id="rigline"></li>
     </ul>
     <details class="fold"><summary>Sources and method</summary>
     <ul class="src">
@@ -347,11 +357,10 @@ footer strong{color:var(--ink)}
     </ul>
     </details>
   </section>
-</div>
-
   <footer>
     <div><strong>An explainer, not a product.</strong> Made for the Imperial EMBA capstone "SLB Lunar Intelligence". It is a capstone concept, not an SLB offering, and not an engineering tool.</div>
   </footer>
+</div>
 </div>
 <button type="button" id="more" hidden>More below ↓</button>
 <nav class="nav" aria-label="Story steps"><div class="in"><div class="bar"><i id="prog"></i></div><div class="row"><button type="button" id="back">Back</button><span id="count"></span><button type="button" id="fwd"></button></div></div></nav>
@@ -498,7 +507,9 @@ function render(){
   const tw=$("tabs"); tw.innerHTML="";
   TABS.forEach((t,i)=>{ const b=el("button",{type:"button",id:"tab-"+t.id,"aria-pressed":t.id===state.tab},"<b>"+(i+1)+". "+t.name+"</b><span>"+t.sub+"</span>"); if(!unlocked(t.id)) b.disabled=true; b.addEventListener("click",()=>{ state.tab=t.id; render(); }); tw.appendChild(b); });
   const tab=state.tab, run=state.run[tab], pick=state.pick[tab];
-  $("tabnote").textContent = tab==="none" ? "This is all orbit shows of the zone. Tap where you would build." : tab==="poor" ? "A rough map: four big blocks, each judged by its average. Tap inside the block you trust." : "A ground survey, square by square. Each tool answers one question. Switch one off to see what goes missing. Then tap a square.";
+  $("buildtitle").textContent=TITLE[tab]; $("modfold").hidden=tab!=="none";
+  if(!$("hero").dataset.bg){ $("hero").dataset.bg=1; $("hero").style.backgroundImage="linear-gradient(rgba(6,12,24,.35),rgba(6,12,24,.92) 62%),url("+AREAS.ari.layers.photo.img+")"; }
+  $("tabnote").textContent = tab==="none" ? "Your zone, seen from orbit. Tap where you would build." : tab==="poor" ? "A rough map: four big blocks, judged by their average. Tap inside the one you trust." : "The zone, measured square by square. Tap a safe square. Or switch a tool off and see what goes missing.";
   const iw=$("inst"); iw.hidden=tab!=="good"; iw.innerHTML="";
   INST.forEach(i=>{ const b=el("button",{type:"button",class:"chip",id:"inst-"+i.id,"aria-pressed":!!state.inst[i.id]},"<b>"+i.name+"</b><span>"+i.what+"</span>"); b.addEventListener("click",()=>{ state.inst[i.id]=!state.inst[i.id]; state.run.good=null; render(); }); iw.appendChild(b); });
   const g=gridSVG(tab,[{q:pick,t:run&&done(tab)&&run.sim.fail?"✕":"●",dead:run&&run.sim.fail&&(run.shown==null||run.sim.fail<=run.shown)}],!run||done(tab));
@@ -507,7 +518,8 @@ function render(){
   $("run").disabled=!pick; $("run").textContent=pick?"Build here and run 10 years":"Tap a square to choose your spot";
   showOutcome();
   const o=odds(d), lab={none:"No data",poor:"Limited data",good:(state.inst.seis&&state.inst.grav&&state.inst.neut)?"Good data":"Incomplete survey"};
-  $("score").innerHTML=TABS.map(t=>{ const r=state.run[t.id]; return "<tr><td>"+lab[t.id]+"</td><td>"+(done(t.id)?(r.sim.fail?'<span class="b">Failed in year '+r.sim.fail+'</span>':'<span class="g">Standing</span>'):"not built yet")+"</td><td>"+(done(t.id)?(o[t.id]?'<span class="b">'+o[t.id]+" lose it</span>":'<span class="g">none lose it</span>'):"·")+"</td></tr>"; }).join("");
+  $("score").innerHTML=TABS.map(t=>{ const r=state.run[t.id], dn=done(t.id); return '<span class="'+(dn?(r.sim.fail?"bad":"ok"):(t.id===state.tab?"now":""))+'">'+lab[t.id]+(dn?(r.sim.fail?" ✕":" ✓"):"")+'</span>'; }).join("");
+  $("rigline").innerHTML="<b>Staged:</b> in this demo your first two builds always fail, wherever you tap. On this invented ground, a blind build would really fail about "+o.none+" times in 100.";
   const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all; $("whycard").hidden=!all; $("notyet").hidden=all; navUpdate(); setTimeout(moreUpdate,60);
   if(all){
     const tg=gridSVG("truth",TABS.map((t,i)=>({q:state.pick[t.id],t:String(i+1),dead:!!state.run[t.id].sim.fail})),false); $("truth").innerHTML=tg.h;
@@ -517,7 +529,7 @@ function render(){
       row("Will the ground hold?","Yes, on "+hold+" of 64 squares.")+
       row("Is it hollow underneath?",c.void?"Yes, under "+c.void+" squares. Avoid them.":"No void found.")+
       row("Is there water?",c.ice?"Yes. Ice under "+c.ice+" squares.":"Not in this zone. Look elsewhere.");
-    let L="We cheated: your first two builds failed wherever you tapped. Without ground data, you could not have known. Honest odds of losing the module: "+o.none+" in 100 with no data, "+o.poor+" with limited data, "+(o.good?o.good+" with an incomplete survey.":"0 with good data.");
+    const full=state.inst.seis&&state.inst.grav&&state.inst.neut; let L = full ? "Same module. Same ground. Three maps. Only the last one answered the questions." : "Your survey left a tool off, so one question stayed open.";
     $("lesson").textContent=L;
   }
   $("cubenote").textContent=a.cubeText;
@@ -534,9 +546,9 @@ function showOutcome(){
   if(r.sim.fail){ p.className="pill bad"; p.textContent="Failed in year "+r.sim.fail; v.textContent=CAUSE[r.sim.cause]+(tab==="none"?" Nothing from orbit could have warned you.":tab==="poor"&&r.inGood?" The map said this block looked good.":tab==="poor"?" The map only said risky. It could not say where.":tab==="good"?(r.flagged?" The survey had flagged this square.":" "+({void:"No gravity meter was on the rover, so nobody looked for voids.",weak:"No seismic station was placed, so nobody measured the soil strength.",ice:"No neutron probe was on the rover, so nobody knew about the ice."})[r.sim.cause]||""):""); }
   else { p.className="pill good"; p.textContent="Standing after 10 years";
     v.textContent="It sank "+fmt(r.sim.settle,1)+" cm, inside the limit."+(tab==="good"?((r.pl.padF>1.05&&simulate(r.g,r.d,{padF:1,ins:r.pl.ins}).fail)||r.pl.ins?" Built with "+[(r.pl.padF>1.05&&simulate(r.g,r.d,{padF:1,ins:r.pl.ins}).fail)?"a pad "+fmt(r.pl.padF,1)+" times wider":"",r.pl.ins?"an insulated floor over the ice":""].filter(x=>x).join(" and ")+", because the survey said so.":(state.inst.seis&&state.inst.grav&&state.inst.neut?" You knew it would.":" But this square was never fully cleared: "+o.good+" of 100 builders with this survey lose the module.")):" That was luck"+(nearVoid(r.cell)?": you are one square, about 500 m, from a buried void.":": "+o[tab]+" of 100 builders using this map lose the module.")); }
-  const i=TABS.findIndex(t=>t.id===tab); nx.hidden=false; nx.textContent = i<2 ? "Now try with "+TABS[i+1].name.toLowerCase() : "See the three answers";
+  const i=TABS.findIndex(t=>t.id===tab); nx.hidden=false; nx.textContent=AFTER[tab];
 }
-$("next").addEventListener("click",()=>{ const i=TABS.findIndex(t=>t.id===state.tab); if(i===2){ go(6); return; } state.tab=TABS[i+1].id; render(); $("buildcard").scrollIntoView({behavior:"smooth",block:"start"}); });
+$("next").addEventListener("click",()=>go(step+1));
 $("run").addEventListener("click",()=>{
   const tab=state.tab, q=state.pick[tab]; if(!q) return; const d=design(), g=G()[q.r][q.c];
   if(tab==="none"){ g.void=true; g.voidDepth=state.area==="ari"?35:12; if(d.weightKN<=300) g.q=Math.min(g.q,d.pressure*0.55); state.blk=null; state.blk=blocks(d).map(b=>b.good); }
@@ -550,21 +562,26 @@ $("run").addEventListener("click",()=>{
   const step=()=>{ if(state.run[tab]!==r) return; if(r.shown<r.sim.yrs.length-1){ r.shown++; showOutcome(); setTimeout(step,330); } else end(); };
   setTimeout(step,330);
 });
-const STEPS=["The questions","What we have","Under the surface","What we need","Your module","Build it","The answers","What is real"];
+const STEPS=9, BUILD={2:"none",4:"poor",6:"good"};
+const FWD=["Start","Build with what we have","","Now try with limited data","","Now try with good data","","What is real here?",""];
+const AFTER={none:"Why did that happen?",poor:"What would it take?",good:"See the three answers"};
+const TITLE={none:"Build 1: with what we have",poor:"Build 2: with limited data",good:"Build 3: with good data"};
 let step=0;
 const allDone=()=>TABS.every(t=>done(t.id));
-function navUpdate(){ $("back").disabled=step===0; $("count").textContent=(step+1)+" / "+STEPS.length; $("prog").style.width=((step+1)/STEPS.length*100)+"%";
-  const f=$("fwd"); f.hidden=step===STEPS.length-1; f.textContent = step===0 ? "Start: what do we have?" : step===5 ? (allDone()?"See the answers":"Skip to the answers") : step<STEPS.length-1 ? "Next: "+STEPS[step+1].toLowerCase() : ""; }
-function go(n){ step=Math.max(0,Math.min(STEPS.length-1,n)); document.querySelectorAll(".step").forEach(s=>s.classList.toggle("on",+s.dataset.step===step)); navUpdate(); window.scrollTo(0,0); if(step===2 && cube3d.ok) cube3d.grow=0; setTimeout(moreUpdate,60); }
-$("back").addEventListener("click",()=>go(step-1)); $("fwd").addEventListener("click",()=>go(step+1)); $("tobuild").addEventListener("click",()=>go(5));
+function navUpdate(){ $("back").disabled=step===0; $("count").textContent=(step+1)+" / "+STEPS; $("prog").style.width=((step+1)/STEPS*100)+"%";
+  const f=$("fwd"), tb=BUILD[step]; f.hidden=step===STEPS-1; f.textContent = tb ? (done(tb)?AFTER[tb]:"Skip this build") : FWD[step]; }
+function go(n){ step=Math.max(0,Math.min(STEPS-1,n)); const tb=BUILD[step]; if(tb) state.tab=tb;
+  document.querySelectorAll(".step").forEach(s=>s.classList.toggle("on",s.dataset.step.split(" ").includes(String(step))));
+  render(); window.scrollTo(0,0); if(step===3 && cube3d.ok) cube3d.grow=0; setTimeout(moreUpdate,60); }
+$("back").addEventListener("click",()=>go(step-1)); $("fwd").addEventListener("click",()=>go(step+1)); $("tobuild").addEventListener("click",()=>go(2));
 function celebrate(){ const sc=$("scene").parentNode, old=sc.querySelector(".confetti"); if(old) old.remove(); const box=el("div",{class:"confetti"}), cols=["#ffd166","#2ea06e","#5b93ff","#f08a80","#ffffff"];
   for(let i=0;i<34;i++){ const p=el("i",{}); p.style.left=(Math.random()*100)+"%"; p.style.background=cols[i%5]; p.style.animationDelay=(Math.random()*.6)+"s"; p.style.animationDuration=(1.3+Math.random()*.9)+"s"; box.appendChild(p); }
   box.appendChild(el("div",{class:"badge"},"✓")); sc.appendChild(box); $("pill").classList.add("cheer"); setTimeout(()=>{ box.remove(); },3200); }
-function moreUpdate(){ const d=document.documentElement; $("more").hidden = d.scrollHeight - window.innerHeight - window.scrollY < 70; }
+function moreUpdate(){ const d=document.documentElement; $("more").hidden = d.scrollHeight - window.innerHeight - window.scrollY < 24; }
 window.addEventListener("scroll",moreUpdate,{passive:true}); window.addEventListener("resize",moreUpdate);
 $("more").addEventListener("click",()=>window.scrollBy({top:window.innerHeight*0.65,behavior:"smooth"}));
 function reset(){ for(const k in AREAS) GROUND[k]=makeGround(k); state.blk=null; state.inst={seis:true,grav:true,neut:true}; state.tab="none"; state.pick={none:null,poor:null,good:null}; state.run={none:null,poor:null,good:null}; render(); }
-$("again").addEventListener("click",()=>{ SALT=Math.floor(Math.random()*1e6); for(const k in AREAS){ AREAS[k].seed=AREAS[k].seed0+SALT; } reset(); go(5); });
+$("again").addEventListener("click",()=>{ SALT=Math.floor(Math.random()*1e6); for(const k in AREAS){ AREAS[k].seed=AREAS[k].seed0+SALT; } reset(); go(2); });
 $("dia").addEventListener("input",e=>{ state.D=+e.target.value; reset(); });
 $("shield").addEventListener("input",e=>{ state.shield=+e.target.value; reset(); });
 document.querySelectorAll("[data-area]").forEach(b=>b.addEventListener("click",()=>{ if(state.area===b.dataset.area) return; state.area=b.dataset.area; state.layer=A().defLayer; reset(); }));
