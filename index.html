@@ -151,6 +151,26 @@ input[type=range]{width:100%;accent-color:var(--accent);height:32px}
 .nav #fwd{flex:1;background:var(--accent);border-color:var(--accent);color:#fff;font-size:15px}
 .nav #fwd[hidden]{display:none}
 .nav #count{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:38px;text-align:center}
+.scene{position:relative;overflow:hidden}
+.confetti{position:absolute;inset:0;pointer-events:none}
+.confetti i{position:absolute;top:-10px;width:7px;height:11px;border-radius:2px;animation:fall 1.9s ease-in forwards}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(190px) rotate(540deg);opacity:0}}
+.badge{position:absolute;left:50%;top:44%;width:74px;height:74px;margin:-37px 0 0 -37px;border-radius:50%;background:#2ea06e;color:#fff;font-size:44px;line-height:74px;text-align:center;font-weight:700;animation:pop 1.6s ease-out forwards;pointer-events:none}
+@keyframes pop{0%{transform:scale(0);opacity:0}25%{transform:scale(1.15);opacity:1}40%{transform:scale(1)}80%{opacity:1}100%{transform:scale(1);opacity:0}}
+.pill.cheer{animation:cheer .5s ease-out 2}
+@keyframes cheer{50%{transform:scale(1.12)}}
+#more{position:fixed;right:14px;bottom:calc(86px + env(safe-area-inset-bottom));z-index:9;font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);box-shadow:0 2px 10px rgba(0,0,0,.25);cursor:pointer;animation:bob 1.4s ease-in-out infinite}
+#more[hidden]{display:none}
+@keyframes bob{50%{transform:translateY(4px)}}
+.qs li b.ans{display:block;font-weight:600;font-size:15px;color:#2ea06e;margin-top:2px}
+details.fold{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+details.fold summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--accent)}
+details.fold[open] summary{margin-bottom:10px}
+details.fold .key{margin-top:8px}
+.big{font-family:var(--display);font-size:20px;font-weight:700;line-height:1.3;margin:0}
+.cubectl{display:flex;gap:8px}
+.cubectl button{flex:1;font:inherit;font-weight:600;font-size:14px;padding:9px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+@media (prefers-reduced-motion: reduce){#more,.pill.cheer{animation:none}}
 /* result */
 .big{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
 .big .num{font-family:var(--display);font-weight:700;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums}
@@ -228,6 +248,9 @@ footer strong{color:var(--ink)}
   <section class="card" id="sub">
     <h2>And this is all orbit sees underground</h2>
     <div class="cube" id="cubewrap"><canvas id="cube" aria-label="3D density model, rotating"></canvas><p class="cubefail" id="cubefail" hidden>This device cannot draw the 3D view.</p></div>
+    <div class="cubectl"><button type="button" id="czout" aria-label="Zoom out">− Zoom</button><button type="button" id="czin" aria-label="Zoom in">+ Zoom</button><button type="button" id="cplay">Pause</button></div>
+    <div class="ctl"><label for="ctilt">Tilt the view</label><input type="range" id="ctilt" min="-30" max="35" step="1" value="0"></div>
+    <div class="ctl"><label for="cthr">Blocks shown <b id="cthrv"></b></label><input type="range" id="cthr" min="0" max="100" step="5" value="65"></div>
     <div class="legend"><span><i style="background:#c8463a"></i>denser than average</span><span><i style="background:#3a6fd0"></i>lighter than average</span><span><i style="background:#ffd166"></i>building zone</span></div>
     <p class="hint" id="cubenote"></p>
     <p class="hint">Blocks kilometres wide. A module is ten metres wide. Orbit helps you choose a region. It cannot answer the three questions.</p>
@@ -273,7 +296,7 @@ footer strong{color:var(--ink)}
       <div class="scene"><svg id="scene" viewBox="0 0 320 150" role="img" aria-label="The module over ten years"></svg></div>
       <span class="pill" id="pill"></span>
       <p class="verdict" id="verd"></p>
-      <button type="button" class="run alt" id="next" hidden></button>
+      <button type="button" class="run" id="next" hidden></button>
     </div>
     <table class="cmp"><thead><tr><th>Map</th><th>Your module</th><th>100 builders</th></tr></thead><tbody id="score"></tbody></table>
     <p class="hint">"100 builders" is the honest count of how many would lose this module choosing from that map.</p>
@@ -283,23 +306,23 @@ footer strong{color:var(--ink)}
 <div class="step" data-step="6">
   <section class="card" id="notyet">
     <h2>The answers come from the ground</h2>
-    <p class="body">Build the module three times first: with no data, poor data and good data.</p>
+    <p class="body">Build the module three times first: with no data, limited data and good data.</p>
     <button type="button" class="run alt" id="tobuild">Go and build</button>
   </section>
 
   <section class="card" id="truthcard" hidden>
     <h2>The three questions, answered</h2>
-    <table class="cmp"><thead><tr><th></th><th>From orbit</th><th>From the ground</th></tr></thead><tbody id="answers"></tbody></table>
-    <div class="gridwrap"><svg id="truth" viewBox="0 0 80 80" role="img" aria-label="The ground as it really is, with your three picks"></svg></div>
-    <div class="key" id="truthkey"></div>
+    <ul class="qs" id="answers"></ul>
     <p class="next" id="lesson"></p>
+    <details class="fold"><summary>See the real ground and your three builds</summary>
+      <div class="gridwrap"><svg id="truth" viewBox="0 0 80 80" role="img" aria-label="The ground as it really is, with your three builds"></svg></div>
+      <div class="key" id="truthkey"></div>
+    </details>
     <button type="button" class="run alt" id="again">Play again on new ground</button>
   </section>
 
-  <section class="card">
-    <h2>Why it matters</h2>
-    <p class="body">No data is a guess. Poor data is a guess that looks like knowledge. Only measurements on the ground answer the three questions.</p>
-    <p class="body">Better data does not make the Moon safer. It tells you where the safe ground is, before you build.</p>
+  <section class="card" id="whycard">
+    <p class="big">Better data does not make the Moon safer. It tells you where the safe ground is, before you build.</p>
   </section>
 </div>
 
@@ -308,6 +331,13 @@ footer strong{color:var(--ink)}
     <h2>What is real here, and what is not</h2>
     <p class="stamp">Public NASA data only. No SLB data. Nothing private.</p>
     <ul class="src">
+      <li><b>Real:</b> every map and photo. NASA public data.</li>
+      <li><b>Ours:</b> the 3D model under the surface, calculated from NASA gravity.</li>
+      <li><b>Invented:</b> the ground under each square, and the ten-year story.</li>
+      <li><b>Rigged:</b> your first two builds always fail. The odds shown are honest.</li>
+    </ul>
+    <details class="fold"><summary>Sources and method</summary>
+    <ul class="src">
       <li><b>Real, from NASA:</b> the Aristarchus photo (LROC camera), terrain and slope (LOLA laser; south pole grid by Barker et al. 2023, <a href="https://pgda.gsfc.nasa.gov/products/90">PGDA product 90</a>), gravity (GRAIL) and south-pole hydrogen (Lunar Prospector). The steep squares at the south pole are real slopes.</li>
       <li><b>Real physics, simple rules:</b> lunar gravity is 1.62 m/s², a sixth of Earth's. Weight and ground pressure come from your design with standard formulas and round figures.</li>
       <li><b>Our own model:</b> the 3D density blocks, calculated for this capstone from GRAIL gravity. One possible answer, not the only one.</li>
@@ -315,6 +345,7 @@ footer strong{color:var(--ink)}
       <li><b>Invented:</b> the ground under every square, what each map shows, and the ten-year timeline. They show what can go wrong. They are not predictions for these places.</li>
       <li><b>Rigged, on purpose:</b> your first two builds always fail. Wherever you tap, we put the hazard there. With no ground data, nobody could tell you otherwise. The "100 builders" numbers are not rigged.</li>
     </ul>
+    </details>
   </section>
 </div>
 
@@ -322,6 +353,7 @@ footer strong{color:var(--ink)}
     <div><strong>An explainer, not a product.</strong> Made for the Imperial EMBA capstone "SLB Lunar Intelligence". It is a capstone concept, not an SLB offering, and not an engineering tool.</div>
   </footer>
 </div>
+<button type="button" id="more" hidden>More below ↓</button>
 <nav class="nav" aria-label="Story steps"><div class="in"><div class="bar"><i id="prog"></i></div><div class="row"><button type="button" id="back">Back</button><span id="count"></span><button type="button" id="fwd"></button></div></div></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -330,7 +362,7 @@ const AREAS = {"ari":{"w":436,"h":348,"bar":50,"alt":"Photo map of the Aristarch
 let SALT=Math.floor(Math.random()*1e6); for(const k in AREAS){ AREAS[k].seed0=AREAS[k].seed; AREAS[k].seed+=SALT; }
 const N=8, G_MOON=1.62, LIMIT=30, YEARS=10;
 const INST=[{id:"seis",name:"Seismic station",what:"will the ground hold?"},{id:"grav",name:"Gravity meter",what:"is it hollow below?"},{id:"neut",name:"Neutron probe",what:"is there water?"}];
-const TABS=[{id:"none",name:"No data",sub:"orbit only"},{id:"poor",name:"Poor data",sub:"2 km blocks"},{id:"good",name:"Good data",sub:"ground survey"}];
+const TABS=[{id:"none",name:"No data",sub:"orbit only"},{id:"poor",name:"Limited data",sub:"2 km blocks"},{id:"good",name:"Good data",sub:"ground survey"}];
 const state={area:"ari", layer:"photo", D:10, levels:2, shield:2, tab:"none", blk:null, inst:{seis:true,grav:true,neut:true}, pick:{none:null,poor:null,good:null}, run:{none:null,poor:null,good:null}};
 const A=()=>AREAS[state.area];
 const $=id=>document.getElementById(id);
@@ -474,19 +506,18 @@ function render(){
   $("key").innerHTML = tab==="good" ? keyHTML(["safe","pad","ice","void","weak","steep"].filter(k=>g.counts[k]>0))+(g.counts.unk?'<span>? = not cleared: '+INST.filter(i=>!state.inst[i.id]).map(i=>i.name.toLowerCase()).join(" and ")+' left off</span>':'') : tab==="poor" ? '<span>Green and amber are averages over 2 km, not what is under each square.</span>' : (g.counts.steep?keyHTML(["steep"])+'<span>(real slope, seen from orbit). The rest all looks the same.</span>':'<span>Every square looks the same from orbit.</span>');
   $("run").disabled=!pick; $("run").textContent=pick?"Build here and run 10 years":"Tap a square to choose your spot";
   showOutcome();
-  const o=odds(d), lab={none:"No data",poor:"Poor data",good:(state.inst.seis&&state.inst.grav&&state.inst.neut)?"Good data":"Incomplete survey"};
+  const o=odds(d), lab={none:"No data",poor:"Limited data",good:(state.inst.seis&&state.inst.grav&&state.inst.neut)?"Good data":"Incomplete survey"};
   $("score").innerHTML=TABS.map(t=>{ const r=state.run[t.id]; return "<tr><td>"+lab[t.id]+"</td><td>"+(done(t.id)?(r.sim.fail?'<span class="b">Failed in year '+r.sim.fail+'</span>':'<span class="g">Standing</span>'):"not built yet")+"</td><td>"+(done(t.id)?(o[t.id]?'<span class="b">'+o[t.id]+" lose it</span>":'<span class="g">none lose it</span>'):"·")+"</td></tr>"; }).join("");
-  const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all; $("notyet").hidden=all; navUpdate();
+  const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all; $("whycard").hidden=!all; $("notyet").hidden=all; navUpdate(); setTimeout(moreUpdate,60);
   if(all){
     const tg=gridSVG("truth",TABS.map((t,i)=>({q:state.pick[t.id],t:String(i+1),dead:!!state.run[t.id].sim.fail})),false); $("truth").innerHTML=tg.h;
     $("truthkey").innerHTML=keyHTML(["safe","pad","ice","void","weak","steep"].filter(k=>tg.counts[k]>0))+'<span>1, 2, 3: your three builds</span>';
-    const c=tg.counts, hold=c.safe+c.pad+c.ice, cant='<span class="b">Cannot tell</span>';
+    const c=tg.counts, hold=c.safe+c.pad+c.ice, row=(q,a)=>'<li><i>✓</i><div>'+q+'<span>From orbit: cannot tell.</span><b class="ans">'+a+'</b></div></li>';
     $("answers").innerHTML=
-      "<tr><td>Will the ground hold?</td><td>"+cant+"</td><td>Yes on "+hold+" of 64 squares"+(c.pad?", "+c.pad+" with a wider pad":"")+"</td></tr>"+
-      "<tr><td>Is it hollow underneath?</td><td>"+cant+"</td><td>"+(c.void?"Yes, under "+c.void+" squares. Avoid them":"No void found")+"</td></tr>"+
-      "<tr><td>Is there water?</td><td>"+cant+"</td><td>"+(c.ice?'<span class="g">Ice under '+c.ice+" squares</span>":"No ice in this zone. Ship water, or look elsewhere")+"</td></tr>";
-    const full=state.inst.seis&&state.inst.grav&&state.inst.neut;
-    let L="We cheated. On your first two builds, we put the hazard wherever you tapped. With no ground data, you could not have known. That is the point. The honest odds: of 100 builders, "+o.none+" lose the module with no data, "+o.poor+" with poor data, and "+(o.good?o.good+" with an incomplete survey.":"none with good data.");
+      row("Will the ground hold?","Yes, on "+hold+" of 64 squares.")+
+      row("Is it hollow underneath?",c.void?"Yes, under "+c.void+" squares. Avoid them.":"No void found.")+
+      row("Is there water?",c.ice?"Yes. Ice under "+c.ice+" squares.":"Not in this zone. Look elsewhere.");
+    let L="We cheated: your first two builds failed wherever you tapped. Without ground data, you could not have known. Honest odds of losing the module: "+o.none+" in 100 with no data, "+o.poor+" with limited data, "+(o.good?o.good+" with an incomplete survey.":"0 with good data.");
     $("lesson").textContent=L;
   }
   $("cubenote").textContent=a.cubeText;
@@ -513,7 +544,7 @@ $("run").addEventListener("click",()=>{
   const pl=plan(d,g,tab==="good",state.inst), B=blocks(d), sn=seen(q.r,q.c,d);
   const r=state.run[tab]={d,g,pl,cell:q,sim:simulate(g,d,pl),inGood:B[(q.r>>2)*2+(q.c>>2)].good,flagged:sn==="void"||sn==="weak"||sn==="steep",shown:0};
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const end=()=>{ r.shown=null; render(); $("out").scrollIntoView({behavior:"smooth",block:"nearest"}); };
+  const end=()=>{ r.shown=null; render(); $("out").scrollIntoView({behavior:"smooth",block:"nearest"}); if(tab==="good" && !r.sim.fail && !reduce) celebrate(); };
   if(reduce){ end(); return; }
   render(); $("run").disabled=true; $("run").textContent="Running…"; $("out").scrollIntoView({behavior:"smooth",block:"nearest"});
   const step=()=>{ if(state.run[tab]!==r) return; if(r.shown<r.sim.yrs.length-1){ r.shown++; showOutcome(); setTimeout(step,330); } else end(); };
@@ -524,8 +555,14 @@ let step=0;
 const allDone=()=>TABS.every(t=>done(t.id));
 function navUpdate(){ $("back").disabled=step===0; $("count").textContent=(step+1)+" / "+STEPS.length; $("prog").style.width=((step+1)/STEPS.length*100)+"%";
   const f=$("fwd"); f.hidden=step===STEPS.length-1; f.textContent = step===0 ? "Start: what do we have?" : step===5 ? (allDone()?"See the answers":"Skip to the answers") : step<STEPS.length-1 ? "Next: "+STEPS[step+1].toLowerCase() : ""; }
-function go(n){ step=Math.max(0,Math.min(STEPS.length-1,n)); document.querySelectorAll(".step").forEach(s=>s.classList.toggle("on",+s.dataset.step===step)); navUpdate(); window.scrollTo(0,0); }
+function go(n){ step=Math.max(0,Math.min(STEPS.length-1,n)); document.querySelectorAll(".step").forEach(s=>s.classList.toggle("on",+s.dataset.step===step)); navUpdate(); window.scrollTo(0,0); if(step===2 && cube3d.ok) cube3d.grow=0; setTimeout(moreUpdate,60); }
 $("back").addEventListener("click",()=>go(step-1)); $("fwd").addEventListener("click",()=>go(step+1)); $("tobuild").addEventListener("click",()=>go(5));
+function celebrate(){ const sc=$("scene").parentNode, old=sc.querySelector(".confetti"); if(old) old.remove(); const box=el("div",{class:"confetti"}), cols=["#ffd166","#2ea06e","#5b93ff","#f08a80","#ffffff"];
+  for(let i=0;i<34;i++){ const p=el("i",{}); p.style.left=(Math.random()*100)+"%"; p.style.background=cols[i%5]; p.style.animationDelay=(Math.random()*.6)+"s"; p.style.animationDuration=(1.3+Math.random()*.9)+"s"; box.appendChild(p); }
+  box.appendChild(el("div",{class:"badge"},"✓")); sc.appendChild(box); $("pill").classList.add("cheer"); setTimeout(()=>{ box.remove(); },3200); }
+function moreUpdate(){ const d=document.documentElement; $("more").hidden = d.scrollHeight - window.innerHeight - window.scrollY < 70; }
+window.addEventListener("scroll",moreUpdate,{passive:true}); window.addEventListener("resize",moreUpdate);
+$("more").addEventListener("click",()=>window.scrollBy({top:window.innerHeight*0.65,behavior:"smooth"}));
 function reset(){ for(const k in AREAS) GROUND[k]=makeGround(k); state.blk=null; state.inst={seis:true,grav:true,neut:true}; state.tab="none"; state.pick={none:null,poor:null,good:null}; state.run={none:null,poor:null,good:null}; render(); }
 $("again").addEventListener("click",()=>{ SALT=Math.floor(Math.random()*1e6); for(const k in AREAS){ AREAS[k].seed=AREAS[k].seed0+SALT; } reset(); go(5); });
 $("dia").addEventListener("input",e=>{ state.D=+e.target.value; reset(); });
@@ -555,12 +592,12 @@ function initCube(){
     const nz=a.cz.length, th=(a.cz[1]-a.cz[0])*k*a.vexZ, depth=th*nz, top=-a.gap;
     const frame=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(W,depth,D)),new THREE.LineBasicMaterial({color:0x4a607f})); frame.position.y=top-depth/2; body.add(frame);
     let maxAbs=1; a.cube.forEach(r=>r.forEach(c=>c.forEach(v=>{ if(Math.abs(v)>maxAbs) maxAbs=Math.abs(v); })));
-    const list=[], thr=.33*maxAbs, ny=a.cube.length, nx=a.cube[0].length, cs=a.cell*k;
+    const list=[], thr=(cube3d.thr||.34)*maxAbs, ny=a.cube.length, nx=a.cube[0].length, cs=a.cell*k;
     for(let iy=0;iy<ny;iy++)for(let ix=0;ix<nx;ix++)for(let iz=0;iz<nz;iz++){ const v=a.cube[iy][ix][iz]; if(Math.abs(v)>=thr) list.push([ix,iy,iz,v]); }
     const mesh=new THREE.InstancedMesh(new THREE.BoxGeometry(cs*.93,th*.93,cs*.93),new THREE.MeshLambertMaterial({transparent:true,opacity:.88}),Math.max(1,list.length));
     mesh.count=list.length; const m4=new THREE.Matrix4(), col=new THREE.Color();
     list.forEach((q,i)=>{ m4.makeTranslation(-W/2+(q[0]+.5)*cs, top-(q[2]+.5)*th, -D/2+(q[1]+.5)*cs); mesh.setMatrixAt(i,m4); const t=Math.min(1,(Math.abs(q[3])-thr)/(maxAbs-thr)); if(q[3]>0) col.setRGB(.62+.28*t,.36-.16*t,.30-.12*t); else col.setRGB(.30-.12*t,.50-.10*t,.70+.22*t); mesh.setColorAt(i,col); });
-    if(mesh.instanceColor) mesh.instanceColor.needsUpdate=true; body.add(mesh);
+    if(mesh.instanceColor) mesh.instanceColor.needsUpdate=true; body.add(mesh); cube3d.vox=mesh; cube3d.grow=0; cube3d.n=list.length;
     cube3d.geom={k,W,D,top,depth};
   };
   cube3d.pin=function(){
@@ -576,11 +613,21 @@ function initCube(){
   window.addEventListener("pointerup",()=>{ drag=null; cv.style.cursor="grab"; });
   window.addEventListener("pointercancel",()=>{ drag=null; });
   function size(){ const w=cv.clientWidth,h=cv.clientHeight,pr=renderer.getPixelRatio(); if(!w||!h) return; if(cv.width!==Math.round(w*pr)||cv.height!==Math.round(h*pr)){ renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); } }
-  (function loop(){ size(); if(auto) g.rotation.y+=.0035; renderer.render(scene,cam); requestAnimationFrame(loop); })();
+  let zoom=1; const setCam=()=>{ cam.position.set(0,52*zoom,112*zoom); cam.lookAt(0,-9,0); };
+  $("czin").addEventListener("click",()=>{ zoom=Math.max(.7,zoom-.1); setCam(); });
+  $("czout").addEventListener("click",()=>{ zoom=Math.min(1.5,zoom+.1); setCam(); });
+  $("cplay").addEventListener("click",()=>{ auto=!auto; $("cplay").textContent=auto?"Pause":"Spin"; });
+  cv.addEventListener("pointerdown",()=>{ $("cplay").textContent="Spin"; });
+  $("ctilt").addEventListener("input",e=>{ g.rotation.x=+e.target.value*Math.PI/180; });
+  const thrSet=()=>{ const v=+$("cthr").value; cube3d.thr=.6-v/100*.4; cube3d.build(); cube3d.pin(); $("cthrv").textContent=cube3d.n; };
+  $("cthr").addEventListener("input",thrSet); $("cthrv").textContent=cube3d.n;
+  $("cplay").textContent=auto?"Pause":"Spin";
+  (function loop(){ size(); if(auto) g.rotation.y+=.008; if(cube3d.vox && cube3d.grow<1){ cube3d.grow=Math.min(1,cube3d.grow+.025); const e=1-Math.pow(1-cube3d.grow,3); cube3d.vox.scale.y=Math.max(.01,e); } renderer.render(scene,cam); requestAnimationFrame(loop); })();
 }
 render();
 initCube();
 navUpdate();
+setTimeout(moreUpdate,300);
 </script>
 </body>
 </html>
