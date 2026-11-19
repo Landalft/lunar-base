@@ -130,7 +130,7 @@ input[type=range]{width:100%;accent-color:var(--accent);height:32px}
 .res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .res li b{font-weight:600}.res li.f{color:#d0443a}.res li span{display:block;font-size:12px;color:var(--muted)}
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 4px;font:inherit;font-size:13px;line-height:1.25;cursor:pointer}
+.tabs button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 4px;font:inherit;font-size:13px;line-height:1.25;cursor:pointer}
 .tabs button b{display:block;font-size:14px}.tabs button span{color:var(--muted);font-size:11px}
 .tabs button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .tabs button:disabled{opacity:.45;cursor:not-allowed}
@@ -138,6 +138,19 @@ input[type=range]{width:100%;accent-color:var(--accent);height:32px}
 .qs li{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px;font-weight:600;display:flex;gap:10px;align-items:baseline}
 .qs li i{font-style:normal;font-family:var(--mono);color:var(--accent);font-weight:700}
 .qs li span{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+.step{display:none;flex-direction:column;gap:14px}
+.step.on{display:flex}
+.wrap{padding-bottom:96px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding:8px 14px calc(10px + env(safe-area-inset-bottom))}
+.nav .in{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.nav .bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.nav .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.nav .row{display:flex;gap:8px;align-items:center}
+.nav button{font:inherit;font-weight:600;border-radius:10px;padding:12px 14px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav #fwd{flex:1;background:var(--accent);border-color:var(--accent);color:#fff;font-size:15px}
+.nav #fwd[hidden]{display:none}
+.nav #count{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:38px;text-align:center}
 /* result */
 .big{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
 .big .num{font-family:var(--display);font-weight:700;font-size:64px;line-height:.9;font-variant-numeric:tabular-nums}
@@ -178,6 +191,7 @@ footer strong{color:var(--ink)}
 </head>
 <body>
 <div class="wrap">
+<div class="step on" data-step="0">
   <header>
     <div class="eyebrow">Understanding the Moon</div>
     <h1>Before anyone builds on the Moon, three questions need answers</h1>
@@ -185,7 +199,7 @@ footer strong{color:var(--ink)}
   </header>
 
   <section class="card">
-    <h2><span class="n">1</span>The three questions</h2>
+    <h2>The three questions</h2>
     <ul class="qs">
       <li><i>?</i><div>Will the ground hold my base?<span>Loose soil lets a heavy module sink.</span></div></li>
       <li><i>?</i><div>Is it hollow underneath?<span>Old lava tunnels can run below the surface.</span></div></li>
@@ -193,9 +207,11 @@ footer strong{color:var(--ink)}
     </ul>
     <p class="hint">Get one wrong and you lose the base, or ship water from Earth for good.</p>
   </section>
+</div>
 
+<div class="step" data-step="1">
   <section class="card" aria-label="Map">
-    <h2><span class="n">2</span>What we have: maps from orbit</h2>
+    <h2>What we have: maps from orbit</h2>
     <p class="hint">Real NASA data. Sharp on the surface. Pick a region and look.</p>
     <div class="area" role="group" aria-label="Region">
       <button type="button" id="area-ari" data-area="ari" aria-pressed="true"><b>Aristarchus plateau</b><span>Our worked example</span></button>
@@ -206,7 +222,9 @@ footer strong{color:var(--ink)}
     <p class="hint" id="layernote"></p>
     <p class="hint">The yellow box is a building zone, 4 km across.</p>
   </section>
+</div>
 
+<div class="step" data-step="2">
   <section class="card" id="sub">
     <h2>And this is all orbit sees underground</h2>
     <div class="cube" id="cubewrap"><canvas id="cube" aria-label="3D density model, rotating"></canvas><p class="cubefail" id="cubefail" hidden>This device cannot draw the 3D view.</p></div>
@@ -214,9 +232,11 @@ footer strong{color:var(--ink)}
     <p class="hint" id="cubenote"></p>
     <p class="hint">Blocks kilometres wide. A module is ten metres wide. Orbit helps you choose a region. It cannot answer the three questions.</p>
   </section>
+</div>
 
+<div class="step" data-step="3">
   <section class="card">
-    <h2><span class="n">3</span>What we need: measurements on the ground</h2>
+    <h2>What we need: measurements on the ground</h2>
     <ul class="qs">
       <li><i>1</i><div>Seismic station<span>Answers: will the ground hold?</span></div></li>
       <li><i>2</i><div>Gravity meter<span>Answers: is it hollow underneath?</span></div></li>
@@ -224,9 +244,11 @@ footer strong{color:var(--ink)}
     </ul>
     <p class="hint">On Earth these are routine before anything is built. No building site on the Moon has been surveyed this way yet.</p>
   </section>
+</div>
 
+<div class="step" data-step="4">
   <section class="card">
-    <h2><span class="n">4</span>Try it: design a module</h2>
+    <h2>Design a module to build</h2>
     <div class="scene"><svg id="mod" viewBox="0 0 320 130" role="img" aria-label="Side view of the module"></svg></div>
     <div class="ctl"><label for="dia">Diameter <b id="diav"></b></label><input type="range" id="dia" min="6" max="20" step="1" value="10"></div>
     <p class="rowlabel">Floors</p>
@@ -235,9 +257,11 @@ footer strong{color:var(--ink)}
     <dl class="tiles" id="tiles"></dl>
     <p class="hint">Bigger and heavier asks more of the ground.</p>
   </section>
+</div>
 
+<div class="step" data-step="5">
   <section class="card" id="buildcard">
-    <h2><span class="n">5</span>Now build it, three times</h2>
+    <h2>Build it three times</h2>
     <p class="hint">Same module, same ground. Only the map changes.</p>
     <div class="tabs" id="tabs" role="group" aria-label="Which map you build from"></div>
     <p class="hint" id="tabnote"></p>
@@ -254,6 +278,14 @@ footer strong{color:var(--ink)}
     <table class="cmp"><thead><tr><th>Map</th><th>Your module</th><th>100 builders</th></tr></thead><tbody id="score"></tbody></table>
     <p class="hint">"100 builders" is the honest count of how many would lose this module choosing from that map.</p>
   </section>
+</div>
+
+<div class="step" data-step="6">
+  <section class="card" id="notyet">
+    <h2>The answers come from the ground</h2>
+    <p class="body">Build the module three times first: with no data, poor data and good data.</p>
+    <button type="button" class="run alt" id="tobuild">Go and build</button>
+  </section>
 
   <section class="card" id="truthcard" hidden>
     <h2>The three questions, answered</h2>
@@ -269,7 +301,9 @@ footer strong{color:var(--ink)}
     <p class="body">No data is a guess. Poor data is a guess that looks like knowledge. Only measurements on the ground answer the three questions.</p>
     <p class="body">Better data does not make the Moon safer. It tells you where the safe ground is, before you build.</p>
   </section>
+</div>
 
+<div class="step" data-step="7">
   <section class="card">
     <h2>What is real here, and what is not</h2>
     <p class="stamp">Public NASA data only. No SLB data. Nothing private.</p>
@@ -282,11 +316,13 @@ footer strong{color:var(--ink)}
       <li><b>Rigged, on purpose:</b> your first two builds always fail. Wherever you tap, we put the hazard there. With no ground data, nobody could tell you otherwise. The "100 builders" numbers are not rigged.</li>
     </ul>
   </section>
+</div>
 
   <footer>
     <div><strong>An explainer, not a product.</strong> Made for the Imperial EMBA capstone "SLB Lunar Intelligence". It is a capstone concept, not an SLB offering, and not an engineering tool.</div>
   </footer>
 </div>
+<nav class="nav" aria-label="Story steps"><div class="in"><div class="bar"><i id="prog"></i></div><div class="row"><button type="button" id="back">Back</button><span id="count"></span><button type="button" id="fwd"></button></div></div></nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -440,7 +476,7 @@ function render(){
   showOutcome();
   const o=odds(d), lab={none:"No data",poor:"Poor data",good:(state.inst.seis&&state.inst.grav&&state.inst.neut)?"Good data":"Incomplete survey"};
   $("score").innerHTML=TABS.map(t=>{ const r=state.run[t.id]; return "<tr><td>"+lab[t.id]+"</td><td>"+(done(t.id)?(r.sim.fail?'<span class="b">Failed in year '+r.sim.fail+'</span>':'<span class="g">Standing</span>'):"not built yet")+"</td><td>"+(done(t.id)?(o[t.id]?'<span class="b">'+o[t.id]+" lose it</span>":'<span class="g">none lose it</span>'):"·")+"</td></tr>"; }).join("");
-  const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all;
+  const all=TABS.every(t=>done(t.id)); $("truthcard").hidden=!all; $("notyet").hidden=all; navUpdate();
   if(all){
     const tg=gridSVG("truth",TABS.map((t,i)=>({q:state.pick[t.id],t:String(i+1),dead:!!state.run[t.id].sim.fail})),false); $("truth").innerHTML=tg.h;
     $("truthkey").innerHTML=keyHTML(["safe","pad","ice","void","weak","steep"].filter(k=>tg.counts[k]>0))+'<span>1, 2, 3: your three builds</span>';
@@ -467,9 +503,9 @@ function showOutcome(){
   if(r.sim.fail){ p.className="pill bad"; p.textContent="Failed in year "+r.sim.fail; v.textContent=CAUSE[r.sim.cause]+(tab==="none"?" Nothing from orbit could have warned you.":tab==="poor"&&r.inGood?" The map said this block looked good.":tab==="poor"?" The map only said risky. It could not say where.":tab==="good"?(r.flagged?" The survey had flagged this square.":" "+({void:"No gravity meter was on the rover, so nobody looked for voids.",weak:"No seismic station was placed, so nobody measured the soil strength.",ice:"No neutron probe was on the rover, so nobody knew about the ice."})[r.sim.cause]||""):""); }
   else { p.className="pill good"; p.textContent="Standing after 10 years";
     v.textContent="It sank "+fmt(r.sim.settle,1)+" cm, inside the limit."+(tab==="good"?((r.pl.padF>1.05&&simulate(r.g,r.d,{padF:1,ins:r.pl.ins}).fail)||r.pl.ins?" Built with "+[(r.pl.padF>1.05&&simulate(r.g,r.d,{padF:1,ins:r.pl.ins}).fail)?"a pad "+fmt(r.pl.padF,1)+" times wider":"",r.pl.ins?"an insulated floor over the ice":""].filter(x=>x).join(" and ")+", because the survey said so.":(state.inst.seis&&state.inst.grav&&state.inst.neut?" You knew it would.":" But this square was never fully cleared: "+o.good+" of 100 builders with this survey lose the module.")):" That was luck"+(nearVoid(r.cell)?": you are one square, about 500 m, from a buried void.":": "+o[tab]+" of 100 builders using this map lose the module.")); }
-  const i=TABS.findIndex(t=>t.id===tab); nx.hidden=i===2; if(i<2) nx.textContent="Now try with "+TABS[i+1].name.toLowerCase();
+  const i=TABS.findIndex(t=>t.id===tab); nx.hidden=false; nx.textContent = i<2 ? "Now try with "+TABS[i+1].name.toLowerCase() : "See the three answers";
 }
-$("next").addEventListener("click",()=>{ const i=TABS.findIndex(t=>t.id===state.tab); state.tab=TABS[i+1].id; render(); $("buildcard").scrollIntoView({behavior:"smooth",block:"start"}); });
+$("next").addEventListener("click",()=>{ const i=TABS.findIndex(t=>t.id===state.tab); if(i===2){ go(6); return; } state.tab=TABS[i+1].id; render(); $("buildcard").scrollIntoView({behavior:"smooth",block:"start"}); });
 $("run").addEventListener("click",()=>{
   const tab=state.tab, q=state.pick[tab]; if(!q) return; const d=design(), g=G()[q.r][q.c];
   if(tab==="none"){ g.void=true; g.voidDepth=state.area==="ari"?35:12; if(d.weightKN<=300) g.q=Math.min(g.q,d.pressure*0.55); state.blk=null; state.blk=blocks(d).map(b=>b.good); }
@@ -477,14 +513,21 @@ $("run").addEventListener("click",()=>{
   const pl=plan(d,g,tab==="good",state.inst), B=blocks(d), sn=seen(q.r,q.c,d);
   const r=state.run[tab]={d,g,pl,cell:q,sim:simulate(g,d,pl),inGood:B[(q.r>>2)*2+(q.c>>2)].good,flagged:sn==="void"||sn==="weak"||sn==="steep",shown:0};
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const end=()=>{ r.shown=null; render(); if(TABS.every(t=>done(t.id))) $("truthcard").scrollIntoView({behavior:"smooth",block:"start"}); };
+  const end=()=>{ r.shown=null; render(); $("out").scrollIntoView({behavior:"smooth",block:"nearest"}); };
   if(reduce){ end(); return; }
   render(); $("run").disabled=true; $("run").textContent="Running…"; $("out").scrollIntoView({behavior:"smooth",block:"nearest"});
   const step=()=>{ if(state.run[tab]!==r) return; if(r.shown<r.sim.yrs.length-1){ r.shown++; showOutcome(); setTimeout(step,330); } else end(); };
   setTimeout(step,330);
 });
+const STEPS=["The questions","What we have","Under the surface","What we need","Your module","Build it","The answers","What is real"];
+let step=0;
+const allDone=()=>TABS.every(t=>done(t.id));
+function navUpdate(){ $("back").disabled=step===0; $("count").textContent=(step+1)+" / "+STEPS.length; $("prog").style.width=((step+1)/STEPS.length*100)+"%";
+  const f=$("fwd"); f.hidden=step===STEPS.length-1; f.textContent = step===0 ? "Start: what do we have?" : step===5 ? (allDone()?"See the answers":"Skip to the answers") : step<STEPS.length-1 ? "Next: "+STEPS[step+1].toLowerCase() : ""; }
+function go(n){ step=Math.max(0,Math.min(STEPS.length-1,n)); document.querySelectorAll(".step").forEach(s=>s.classList.toggle("on",+s.dataset.step===step)); navUpdate(); window.scrollTo(0,0); }
+$("back").addEventListener("click",()=>go(step-1)); $("fwd").addEventListener("click",()=>go(step+1)); $("tobuild").addEventListener("click",()=>go(5));
 function reset(){ for(const k in AREAS) GROUND[k]=makeGround(k); state.blk=null; state.inst={seis:true,grav:true,neut:true}; state.tab="none"; state.pick={none:null,poor:null,good:null}; state.run={none:null,poor:null,good:null}; render(); }
-$("again").addEventListener("click",()=>{ SALT=Math.floor(Math.random()*1e6); for(const k in AREAS){ AREAS[k].seed=AREAS[k].seed0+SALT; } reset(); $("buildcard").scrollIntoView({behavior:"smooth",block:"start"}); });
+$("again").addEventListener("click",()=>{ SALT=Math.floor(Math.random()*1e6); for(const k in AREAS){ AREAS[k].seed=AREAS[k].seed0+SALT; } reset(); go(5); });
 $("dia").addEventListener("input",e=>{ state.D=+e.target.value; reset(); });
 $("shield").addEventListener("input",e=>{ state.shield=+e.target.value; reset(); });
 document.querySelectorAll("[data-area]").forEach(b=>b.addEventListener("click",()=>{ if(state.area===b.dataset.area) return; state.area=b.dataset.area; state.layer=A().defLayer; reset(); }));
@@ -532,11 +575,12 @@ function initCube(){
   window.addEventListener("pointermove",e=>{ if(drag) g.rotation.y=drag.r+(e.clientX-drag.x)*.012; });
   window.addEventListener("pointerup",()=>{ drag=null; cv.style.cursor="grab"; });
   window.addEventListener("pointercancel",()=>{ drag=null; });
-  function size(){ const w=cv.clientWidth,h=cv.clientHeight,pr=renderer.getPixelRatio(); if(cv.width!==Math.round(w*pr)||cv.height!==Math.round(h*pr)){ renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); } }
+  function size(){ const w=cv.clientWidth,h=cv.clientHeight,pr=renderer.getPixelRatio(); if(!w||!h) return; if(cv.width!==Math.round(w*pr)||cv.height!==Math.round(h*pr)){ renderer.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); } }
   (function loop(){ size(); if(auto) g.rotation.y+=.0035; renderer.render(scene,cam); requestAnimationFrame(loop); })();
 }
 render();
 initCube();
+navUpdate();
 </script>
 </body>
 </html>
