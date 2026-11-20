@@ -372,10 +372,15 @@ h1 em,h2 em,.big em{font-style:normal;color:var(--accent);display:inline;positio
 .area button b{font-family:var(--display);font-weight:400;font-size:26px;text-transform:uppercase;letter-spacing:.02em}
 #more{border-radius:4px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;font-size:11px}
 @media (prefers-reduced-motion: reduce){.heroimg,.step.on{animation:none}}
+.tabsbar{display:flex;gap:6px;margin:0 -20px -28px;padding:10px 20px;background:#04070e;position:relative;z-index:6}
+.tabsbar a{flex:1;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 6px;border:1px solid var(--line);border-radius:4px;color:var(--muted);text-decoration:none}
+.tabsbar a.on{border-color:var(--accent);color:var(--accent)}
+.hero{min-height:calc(100vh - 152px);min-height:calc(100svh - 152px)}
 </style>
 </head>
 <body>
 <div class="wrap">
+<nav class="tabsbar" aria-label="Sections"><a class="on" aria-current="page">Moon builder</a><a href="investor.html">Investor case</a></nav>
 <div class="step on" data-step="0">
   <header class="hero" id="hero">
     <div class="heroimg" id="heroimg"></div><span class="credit">Aristarchus crater · NASA LROC</span>
